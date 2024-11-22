@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Quản Lý Người Dùng Tổ Chức</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #dfe9f3, #ffffff);
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background: #4db8ff;
+            padding: 20px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        /* Menu styles */
+        .menu {
+            display: flex;
+            justify-content: center;
+            background-color: #66ccff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin: 0;
+            padding: 10px 0;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .menu a:hover {
+            background-color: #4db8ff;
+            border-radius: 5px;
+        }
+
+       
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            width: 75%;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            outline: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-bar button {
+            padding: 12px 25px;
+            background-color: #66ccff;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .search-bar button:hover {
+            background-color: #66ccff;
+        }
+        .logout-btn {
+            background-color: #d9534f;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #c9302c;
+            transform: translateY(-3px);
+        }
+
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            color: #555;
+        }
+
+        table th, table td {
+            padding: 14px 18px;
+            border: 1px solid #e0e0e0;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #66ccff;
+            color: #333;
+            font-weight: bold;
+        }
+
+        table tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .action-buttons button {
+            margin-right: 5px;
+            padding: 8px 15px;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 5px;
+            border: none;
+            background-color: #66ccff;
+            color: white;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .action-buttons button:hover {
+            background-color: #66ccff;
+            transform: scale(1.05);
+        }
+
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #ffffff;
+            padding: 25px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            display: none;
+            width: 350px;
+            z-index: 1000;
+        }
+
+        .popup input, .popup select {
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .popup-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .popup-buttons button {
+            flex: 1;
+            padding: 10px 0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+        }
+
+        .popup .btn-close {
+            background-color: #f28080;
+        }
+
+        .popup .btn-save {
+            background-color: #66ccff;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            padding: 15px;
+            background: #66ccff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Quản Lý Người Dùng Tổ Chức</h1>
+        <button class="logout-btn" id="logout-btn">Đăng xuất</button>
+
+    </header>
+    <nav class="menu">
+        <a href="quanly.html">Trang chủ</a>
+        <a href="quanlytochuc.html">Quản Lý tổ chức</a>
+        <a href="lichsumodel.html">Lịch sử hoạt động</a>
+        <a href="model.html">quản lý model</a>
+        <a href="quanlygoiDV.html">Quản lý gói dịch vụ</a>
+    </nav>
+    
+    <div class="container">
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Tìm kiếm theo email hoặc tên...">
+            <button onclick="searchUser()">Tìm kiếm</button>
+        </div>
+    
+        <button onclick="openPopup('add')">Thêm Người Dùng</button>
+    
+        <table id="userTable">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Họ và Tên</th>
+                    <th>Vai Trò</th>
+                    <th>Tên Tổ Chức</th>
+                    <th>Trạng Thái</th>
+                    <th>Ngày Tạo Tài Khoản</th>
+                    <th>Ngày Kết Thúc Gói Dịch Vụ</th>
+                    <th>Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>example1@gmail.com</td>
+                    <td>Nguyễn Văn A</td>
+                    <td>Tổ chức</td>
+                    <td>Công Ty ABC</td>
+                    <td>Hoạt động</td>
+                    <td>2024-01-01</td>
+                    <td>2024-12-31</td>
+                    <td class="action-buttons">
+                        <button onclick="openPopup('edit', this)">Sửa</button>
+                        <button onclick="deleteUser(this)">Xóa</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="popup" id="userPopup">
+        <h3 id="popupTitle">Thêm Người Dùng</h3>
+        <input type="email" id="email" placeholder="Email">
+        <input type="text" id="name" placeholder="Họ và Tên">
+        
+        <select id="role">
+            <option value="Tổ chức">Tổ chức</option>
+        </select>
+    
+        <input type="text" id="organization" placeholder="Tên Tổ Chức">
+    
+        <select id="status">
+            <option value="Hoạt động">Hoạt động</option>
+            <option value="Không hoạt động">Không hoạt động</option>
+        </select>
+    
+        <input type="date" id="creationDate" placeholder="Ngày Tạo Tài Khoản">
+        <input type="date" id="endDate" placeholder="Ngày Kết Thúc Gói Dịch Vụ">
+    
+        <div class="popup-buttons">
+            <button class="btn-close" onclick="closePopup()">Hủy</button>
+            <button class="btn-save" onclick="saveUser()">Lưu</button>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>Hệ Thống Quản Lý Người Dùng Tổ Chức &copy; 2024</p>
+    </div>
+    
+    <script>
+        let currentRow = null;
+    
+        function openPopup(type, button = null) {
+            const popup = document.getElementById('userPopup');
+            const title = document.getElementById('popupTitle');
+            popup.style.display = 'block';
+    
+            if (type === 'edit') {
+                title.textContent = 'Sửa Người Dùng';
+                currentRow = button.closest('tr');
+                document.getElementById('email').value = currentRow.cells[0].textContent;
+                document.getElementById('name').value = currentRow.cells[1].textContent;
+                document.getElementById('role').value = currentRow.cells[2].textContent;
+                document.getElementById('organization').value = currentRow.cells[3].textContent;
+                document.getElementById('status').value = currentRow.cells[4].textContent;
+                document.getElementById('creationDate').value = currentRow.cells[5].textContent;
+                document.getElementById('endDate').value = currentRow.cells[6].textContent;
+            } else {
+                title.textContent = 'Thêm Người Dùng';
+                currentRow = null;
+                document.querySelectorAll('#userPopup input, #userPopup select').forEach(input => input.value = '');
+            }
+        }
+    
+        function closePopup() {
+            document.getElementById('userPopup').style.display = 'none';
+        }
+    
+        function saveUser() {
+            closePopup();
+            if (currentRow) {
+                currentRow.cells[0].textContent = document.getElementById('email').value;
+                currentRow.cells[1].textContent = document.getElementById('name').value;
+                currentRow.cells[2].textContent = document.getElementById('role').value;
+                currentRow.cells[3].textContent = document.getElementById('organization').value;
+                currentRow.cells[4].textContent = document.getElementById('status').value;
+                currentRow.cells[5].textContent = document.getElementById('creationDate').value;
+                currentRow.cells[6].textContent = document.getElementById('endDate').value;
+            } else {
+                const table = document.getElementById('userTable').getElementsByTagName('tbody')[0];
+                const newRow = table.insertRow();
+                newRow.innerHTML = `
+                    <td>${document.getElementById('email').value}</td>
+                    <td>${document.getElementById('name').value}</td>
+                    <td>${document.getElementById('role').value}</td>
+                    <td>${document.getElementById('organization').value}</td>
+                    <td>${document.getElementById('status').value}</td>
+                    <td>${document.getElementById('creationDate').value}</td>
+                    <td>${document.getElementById('endDate').value}</td>
+                    <td class="action-buttons">
+                        <button onclick="openPopup('edit', this)">Sửa</button>
+                        <button onclick="deleteUser(this)">Xóa</button>
+                    </td>
+                `;
+            }
+        }
+    
+        function deleteUser(button) {
+            const row = button.closest('tr');
+            row.remove();
+        }
+    
+        function searchUser() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const rows = document.getElementById('userTable').getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+            Array.from(rows).forEach(row => {
+                const cells = row.getElementsByTagName('td');
+                const match = Array.from(cells).some(cell => cell.textContent.toLowerCase().includes(searchInput));
+                row.style.display = match ? '' : 'none';
+            });
+        }
+        document.getElementById('logout-btn').addEventListener('click', function() {
+            sessionStorage.clear(); // Xóa thông tin admin khỏi SessionStorage
+            window.location.href = "ADMIN.html"; // Quay lại trang đăng nhập
+        });
+        const adminName = sessionStorage.getItem('adminName');
+
+        // Kiểm tra nếu chưa đăng nhập
+        if (!adminName) {
+            alert("Bạn cần đăng nhập trước!");
+            window.location.href = "ADMIN.html"; // Chuyển về trang đăng nhập
+        } else {
+            // Hiển thị tên admin
+            document.getElementById('admin-name').textContent = adminName;
+        }
+
+       
+        
+    </script>
+
+</body>
+</html>

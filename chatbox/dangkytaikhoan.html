@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký Dịch vụ</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #f5f7fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+        h2 {
+            color: #333;
+            font-size: 26px;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+        }
+        label {
+            text-align: left;
+            display: block;
+            font-size: 14px;
+            margin: 10px 0 5px;
+            color: #333;
+            font-weight: 500;
+        }
+        select, input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+            color: #333;
+            background-color: #f7f9fc;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #03A9F4;
+            background-color: #fff;
+        }
+        button {
+            background-color: #03A9F4;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0288D1;
+        }
+        a {
+            text-decoration: none;
+            color: #03A9F4;
+            display: block;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        /* Responsive Design */
+        @media screen and (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            h2 {
+                font-size: 22px;
+            }
+            select, input[type="text"] {
+                padding: 12px;
+            }
+            button {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Đăng ký Dịch vụ</h2>
+    <form action="/submit" method="POST" onsubmit="return validateForm()">
+        <label for="organization-name">Tên tổ chức</label>
+        <input type="text" id="organization-name" name="organization-name" placeholder="Nhập tên tổ chức" required>
+
+        <label for="service-package">Chọn gói dịch vụ</label>
+        <select id="service-package" name="service-package" required>
+            <option value="" disabled selected>Chọn gói dịch vụ</option>
+            <option value="basic">Gói Cơ bản</option>
+            <option value="standard">Gói Tiêu chuẩn</option>
+            <option value="premium">Gói Cao cấp</option>
+        </select>
+
+      
+
+        <button type="submit">Đăng ký Dịch vụ</button>
+    </form>
+    <a href="index.html">Quay lại trang chủ</a>
+</div>
+
+<script>
+    function validateForm() {
+        const orgName = document.getElementById('organization-name').value;
+        const paymentInfo = document.getElementById('payment-info').value;
+
+        if (orgName === "" || paymentInfo === "") {
+            alert("Vui lòng điền đầy đủ thông tin.");
+            return false;
+        }
+        return true;
+    }
+</script>
+
+</body>
+</html>

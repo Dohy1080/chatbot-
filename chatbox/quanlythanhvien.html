@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Thành Viên Tổ Chức</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Thiết lập kiểu cơ bản */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(90deg, #549ff0, #00A2FF);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin: 0;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #66ccff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin: 0;
+            padding: 10px 0;
+            width: 100%;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: #4db8ff;
+            border-radius: 5px;
+        }
+
+        h1 {
+            font-size: 28px;
+        }
+
+        main {
+            padding: 20px;
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #66ccff;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th,
+        td {
+            border: 1px solid #e0e0e0;
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 16px;
+        }
+
+        th {
+            background: #5fb1ef;
+            color: white;
+            font-weight: bold;
+        }
+
+        button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        .edit-btn {
+            background-color: #FFC107;
+            color: #333;
+        }
+
+        .edit-btn:hover {
+            background-color: #e0a800;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+
+        .form-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            z-index: 10;
+            width: 300px;
+            max-width: 80%;
+        }
+
+        .form-popup h3 {
+            margin-bottom: 15px;
+            color: #66ccff;
+            text-align: center;
+        }
+
+        .form-popup input,
+        .form-popup select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .form-popup button {
+            width: 100%;
+            background-color: #66ccff;
+            color: white;
+            font-weight: bold;
+        }
+
+        .form-popup button:hover {
+            background-color: #0056b3;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9;
+        }
+
+        .add-btn {
+            display: inline-block;
+            background-color: #28a745;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .add-btn:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+
+        /* Thêm kiểu cho ô tìm kiếm */
+        .search-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .search-container input {
+            padding: 10px;
+            width: 250px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Quản Lý Thành Viên Tổ Chức</h1>
+    </header>
+
+    <nav>
+        <a href="chongoi.html"><i class="fas fa-cog"></i> Chọn gói dịch vụ</a>
+        <a href="thanhtoan.html"><i class="fas fa-credit-card"></i> Quản Lý Thanh Toán</a>
+        <a href="demouser.html"><i class="fas fa-comments"></i> Quản Lý Kịch Bản Chatbot</a>
+        <a href="quanlythanhvien.html"><i class="fas fa-users"></i> Quản Lý Thành Viên</a>
+    </nav>
+
+    <main>
+        <h2>Danh Sách Thành Viên</h2>
+
+        <!-- Thêm ô tìm kiếm -->
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Tìm kiếm theo tên hoặc email..." onkeyup="searchMembers()">
+        </div>
+
+        <table id="memberTable">
+            <thead>
+                <tr>
+                    <th>Tên</th>
+                    <th>Email</th>
+                    <th>Vai Trò</th>
+                    <th>Trạng Thái</th>
+                    <th>Thao Tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Nguyễn Văn A</td>
+                    <td>vana@example.com</td>
+                    <td>Quản trị viên</td>
+                    <td>Đang hoạt động</td>
+                    <td>
+                        <button class="edit-btn" onclick="openEditForm(this)">Chỉnh sửa</button>
+                        <button class="delete-btn" onclick="deleteMember(this)">Xóa</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="add-btn" onclick="openAddForm()">+ Thêm Thành Viên Mới</div>
+    </main>
+
+    <div class="overlay" id="overlay" onclick="closeForm()"></div>
+
+    <div class="form-popup" id="formPopup">
+        <h3 id="formTitle"></h3>
+        <input type="text" id="name" placeholder="Tên thành viên">
+        <input type="email" id="email" placeholder="Email">
+        <select id="role">
+            <option value="Quản trị viên">Quản trị viên</option>
+            <option value="Nhân viên">Nhân viên</option>
+            <option value="Khách">Khách</option>
+        </select>
+        <select id="status">
+            <option value="Đang hoạt động">Đang hoạt động</option>
+            <option value="Tạm ngừng">Tạm ngừng</option>
+        </select>
+        <button id="saveBtn" onclick="submitForm()">Lưu</button>
+        <button onclick="closeForm()">Đóng</button>
+    </div>
+    <script>
+        let isEditing = false;
+        let editingRow = null;
+
+        function openAddForm() {
+            isEditing = false;
+            document.getElementById('formTitle').innerText = 'Thêm Thành Viên';
+            resetForm();
+            openForm();
+        }
+
+        function openEditForm(button) {
+            isEditing = true;
+            editingRow = button.closest('tr');
+            const cells = editingRow.getElementsByTagName('td');
+            document.getElementById('name').value = cells[0].innerText;
+            document.getElementById('email').value = cells[1].innerText;
+            document.getElementById('role').value = cells[2].innerText;
+            document.getElementById('status').value = cells[3].innerText;
+            document.getElementById('formTitle').innerText = 'Chỉnh sửa Thành Viên';
+            openForm();
+        }
+
+        function openForm() {
+            document.getElementById('formPopup').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+
+        function closeForm() {
+            document.getElementById('formPopup').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+
+        function resetForm() {
+            document.getElementById('name').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('role').value = '';
+            document.getElementById('status').value = 'Đang hoạt động';
+        }
+
+        function submitForm(row = null) {
+    var name = document.getElementById('name').value;
+    var email = document.getElementById('email').value;
+    var role = document.getElementById('role').value;
+    var status = document.getElementById('status').value;
+
+    // Kiểm tra các trường bắt buộc
+    if (name.trim() === "" || email.trim() === "") {
+        alert("Tên và email là bắt buộc!");
+        return; // Dừng lại nếu có trường không hợp lệ
+    }
+
+    if (row) {
+        row.cells[0].innerText = name;
+        row.cells[1].innerText = email;
+        row.cells[2].innerText = role;
+        row.cells[3].innerText = status;
+    } else {
+        var table = document.getElementById('memberTable').getElementsByTagName('tbody')[0];
+        var newRow = table.insertRow();
+        newRow.innerHTML = `<td>${name}</td><td>${email}</td><td>${role}</td><td>${status}</td><td><button class="edit-btn" onclick="openEditForm(this)">Chỉnh sửa</button><button class="delete-btn" onclick="deleteMember(this)">Xóa</button></td>`;
+    }
+
+    closeForm();
+}
+
+        function deleteMember(button) {
+            const row = button.closest('tr');
+            row.remove();
+        }
+
+        function searchMembers() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const rows = document.querySelectorAll('#memberTable tbody tr');
+            rows.forEach(row => {
+                const cells = row.getElementsByTagName('td');
+                const name = cells[0].innerText.toLowerCase();
+                const email = cells[1].innerText.toLowerCase();
+                if (name.includes(query) || email.includes(query)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>

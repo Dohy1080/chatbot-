@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Management</title>
+    <style>
+        /* General styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #b8daed;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #56ccf2, #2f80ed);
+            color: white;
+            margin: 0;
+            font-size: 2em;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .logout-btn {
+            background-color: #d9534f;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #c9302c;
+            transform: translateY(-3px);
+        }
+
+        /* Menu styles */
+        .menu {
+            display: flex;
+            justify-content: center;
+            background-color: #66ccff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin: 0;
+            padding: 10px 0;
+            width: 100%;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .menu a:hover {
+            background-color: #4db8ff;
+            border-radius: 5px;
+        }
+        h2 {
+            color: #2f80ed;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        /* Table styling */
+        #modelsTable {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            color: #333;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        #modelsTable th, #modelsTable td {
+            padding: 14px;
+            text-align: left;
+            border: none;
+        }
+
+        #modelsTable th {
+            background: #2f80ed;
+            color: white;
+            font-weight: 600;
+        }
+
+        #modelsTable tr:nth-child(even) {
+            background-color: #f9fbfc;
+        }
+
+        #modelsTable tr:hover {
+            background-color: #e3f2fd;
+        }
+
+        /* Action buttons */
+        .action-button {
+            padding: 8px 16px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .edit-button {
+            background-color: #2f80ed;
+            color: white;
+        }
+
+        .edit-button:hover {
+            background-color: #1c6dd0;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .history-button {
+            background-color: #f2994a;
+            color: white;
+        }
+
+        .history-button:hover {
+            background-color: #e07a3f;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Modal styling */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            width: 400px;
+            position: relative;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            color: #333;
+            font-size: 1em;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            color: #aaa;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        /* Reuse form styles */
+        .modal-content input, .modal-content select, .modal-content button {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9fbfc;
+            color: #333;
+            font-size: 1em;
+        }
+
+        .modal-content button {
+            background-color: #2f80ed;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-content button:hover {
+            background-color: #1c6dd0;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body>
+    <h1>Model Management</h1>
+    <button class="logout-btn" id="logout-btn">Đăng xuất</button>
+
+    <nav class="menu">
+        <a href="quanly.html">Trang chủ</a>
+        <a href="quanlytochuc.html">Quản Lý tổ chức</a>
+        <a href="lichsumodel.html">Lịch sử hoạt động</a>
+        <a href="model.html">quản lý model</a>
+
+    </nav>
+
+    <!-- Button to open the modal form for adding a new model -->
+    <div style="text-align: center; margin: 20px;">
+        <button class="action-button edit-button" onclick="openModal('add')">Add Model</button>
+    </div>
+
+    <!-- Modal for Adding/Editing Models -->
+    <div id="modelModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">Add Model</h2>
+            <form id="modelForm">
+                <label for="modelName">Model Name:</label>
+                <input type="text" id="modelName" name="modelName" maxlength="255" required>
+
+                <label for="version">Version:</label>
+                <input type="text" id="version" name="version" maxlength="255" required>
+
+                <label for="status">Status:</label>
+                <select id="status" name="status" required>
+                    <option value="Đào tạo">Đào tạo</option>
+                    <option value="Thử nghiệm">Thử nghiệm</option>
+                    <option value="Hoạt động">Hoạt động</option>
+                    <option value="Không được dùng nữa">Không được dùng nữa</option>
+                </select>
+
+                <label for="createdDate">Created Date:</label>
+                <input type="datetime-local" id="createdDate" name="createdDate">
+
+                <label for="lastModifiedDate">Last Modified Date:</label>
+                <input type="datetime-local" id="lastModifiedDate" name="lastModifiedDate">
+
+                <button type="submit">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Table to Display Models -->
+    <div>
+        <h2>Models List</h2>
+        <table id="modelsTable">
+            <thead>
+                <tr>
+                    <th>Model ID</th>
+                    <th>Model Name</th>
+                    <th>Version</th>
+                    <th>Status</th>
+                    <th>Created Date</th>
+                    <th>Last Modified Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dynamic Rows will go here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        let modelID = JSON.parse(localStorage.getItem('lastModelID')) || 1;
+        let models = JSON.parse(localStorage.getItem('models')) || [];
+        let modelHistory = JSON.parse(localStorage.getItem('modelHistory')) || []; // History storage
+        let currentEditID = null;
+    
+        function renderModels() {
+            const tableBody = document.getElementById('modelsTable').querySelector('tbody');
+            tableBody.innerHTML = '';
+            models.forEach((model) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${model.modelID}</td>
+                    <td>${model.modelName}</td>
+                    <td>${model.version}</td>
+                    <td>${model.status}</td>
+                    <td>${model.createdDate}</td>
+                    <td>${model.lastModifiedDate}</td>
+                    <td>
+                        <button class="action-button edit-button" onclick="editModel(${model.modelID})">Edit</button>
+                        <button class="action-button history-button" onclick="viewHistory(${model.modelID})">View History</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+    
+        function openModal(action) {
+            document.getElementById('modelForm').reset();
+            if (action === 'add') {
+                currentEditID = null;
+                document.getElementById('modalTitle').innerText = 'Add Model';
+            } else {
+                document.getElementById('modalTitle').innerText = 'Edit Model';
+            }
+            document.getElementById('modelModal').style.display = 'flex';
+        }
+    
+        function closeModal() {
+            document.getElementById('modelModal').style.display = 'none';
+        }
+    
+        document.getElementById('modelForm').onsubmit = function(event) {
+            event.preventDefault();
+            const modelName = document.getElementById('modelName').value;
+            const version = document.getElementById('version').value;
+            const status = document.getElementById('status').value;
+            const createdDate = document.getElementById('createdDate').value || new Date().toISOString().slice(0, 16);
+            const lastModifiedDate = document.getElementById('lastModifiedDate').value || new Date().toISOString().slice(0, 16);
+    
+            if (currentEditID === null) {
+                const newModel = {
+                    modelID: modelID++,
+                    modelName,
+                    version,
+                    status,
+                    createdDate,
+                    lastModifiedDate
+                };
+                models.push(newModel);
+            } else {
+                const modelIndex = models.findIndex((m) => m.modelID === currentEditID);
+                if (modelIndex > -1) {
+                    const previousVersion = JSON.stringify(models[modelIndex]);
+                    models[modelIndex] = { modelID: currentEditID, modelName, version, status, createdDate, lastModifiedDate };
+                    
+                    const newVersion = JSON.stringify(models[modelIndex]);
+                    addEditHistory(currentEditID, previousVersion, newVersion);
+                }
+            }
+    
+            localStorage.setItem('models', JSON.stringify(models));
+            localStorage.setItem('lastModelID', modelID);
+            renderModels();
+            closeModal();
+        };
+    
+        function editModel(id) {
+            currentEditID = id;
+            const model = models.find((m) => m.modelID === id);
+            if (model) {
+                document.getElementById('modelName').value = model.modelName;
+                document.getElementById('version').value = model.version;
+                document.getElementById('status').value = model.status;
+                document.getElementById('createdDate').value = model.createdDate;
+                document.getElementById('lastModifiedDate').value = model.lastModifiedDate;
+                openModal('edit');
+            }
+        }
+    
+        function addEditHistory(modelID, previousVersion, currentVersion) {
+            const historyID = modelHistory.length ? modelHistory[modelHistory.length - 1].historyID + 1 : 1;
+            const changeDate = new Date().toISOString().slice(0, 16);
+            const historyRecord = {
+                historyID,
+                modelID,
+                changeDate,
+                previousVersion,
+                currentVersion,
+                changeDescription: `Edited model ${modelID}`
+            };
+            modelHistory.push(historyRecord);
+            localStorage.setItem('modelHistory', JSON.stringify(modelHistory));
+        }
+    
+        window.onload = function() {
+            renderModels();
+        };
+        const adminName = sessionStorage.getItem('adminName');
+
+        // Kiểm tra nếu chưa đăng nhập
+        if (!adminName) {
+            alert("Bạn cần đăng nhập trước!");
+            window.location.href = "ADMIN.html"; // Chuyển về trang đăng nhập
+        } else {
+            // Hiển thị tên admin
+            document.getElementById('admin-name').textContent = adminName;
+        }
+
+        // Xử lý nút Đăng xuất
+        document.getElementById('logout-btn').addEventListener('click', function() {
+            sessionStorage.clear(); // Xóa thông tin admin khỏi SessionStorage
+            window.location.href = "ADMIN.html"; // Quay lại trang đăng nhập
+        });
+    </script>
+    
+</body>
+</html>

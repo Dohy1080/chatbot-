@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý Kịch bản Chatbot</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      background-image: url('https://img.icons8.com/clouds/100/000000/chatbot.png'),
+      url('https://img.icons8.com/clouds/100/000000/artificial-intelligence.png'),
+      url('https://img.icons8.com/clouds/100/000000/machine-learning.png'),
+      url('https://img.icons8.com/clouds/100/000000/neural.png'),
+      url('https://img.icons8.com/clouds/100/000000/robot-2.png');
+      background-repeat: repeat;
+      background-size: 100px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      width: 80%;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 20px;
+      color: #333;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      background-color: #0056b3;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .actions {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    i {
+      margin-right: 5px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+      padding-top: 60px;
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 5% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 50%;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    th:nth-child(4), td:nth-child(4) {
+      display: none;
+    }
+    
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #3bdc35;
+            color: white;
+            text-decoration: none;
+border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.1s;
+            margin: 10px;
+        }
+
+        .back-btn:hover {
+            background-color: #c82333;
+            transform: scale(1.05);
+        }
+
+  </style>
+</head>
+
+<body>
+  <div> 
+    <a href="trangchinh.html" class="back-btn">Quay lại</a>
+</div>
+<div class="container">
+  <h1><i class="fas fa-robot"></i> Quản lý Kịch bản Chatbot</h1>
+
+  <!-- Form Thêm mới hoặc chỉnh sửa kịch bản -->
+  <form id="scriptForm">
+    <div class="form-group">
+      <label for="scriptName"><i class="fas fa-edit"></i> Tên kịch bản:</label>
+      <input type="text" id="scriptName" name="scriptName" required>
+    </div>
+    <div class="form-group">
+      <label for="description"><i class="fas fa-info-circle"></i> Mô tả:</label>
+      <textarea id="description" name="description" rows="3"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="content"><i class="fas fa-file-alt"></i> Nội dung kịch bản:</label>
+      <textarea id="content" name="content" rows="5" required></textarea>
+    </div>
+    <div class="form-group">
+      <label for="status"><i class="fas fa-tasks"></i> Trạng thái:</label>
+      <select id="status" name="status">
+        <option value="Draft">Nháp</option>
+        <option value="Published">Đã xuất bản</option>
+        <option value="Archived">Đã lưu trữ</option>
+      </select>
+    </div>
+    <div class="actions">
+      <button type="submit" class="btn"><i class="fas fa-save"></i> Lưu Kịch bản</button>
+    </div>
+  </form>
+
+  <!-- Bảng quản lý kịch bản -->
+  <table>
+    <thead>
+      <tr>
+        <th><i class="fas fa-id-badge"></i> ID</th>
+        <th><i class="fas fa-book"></i> Tên kịch bản</th>
+        <th><i class="fas fa-info-circle"></i> Mô tả</th>
+        <th><i class="fas fa-file-alt"></i> Nội dung</th>
+        <th><i class="fas fa-tasks"></i> Trạng thái</th>
+        <th><i class="fas fa-calendar-alt"></i> Ngày tạo</th>
+        <th><i class="fas fa-calendar-check"></i> Ngày sửa đổi</th>
+        <th><i class="fas fa-cogs"></i> Hành động</th>
+      </tr>
+    </thead>
+    <tbody id="scriptList">
+      <tr>
+        <td>1</td>
+        <td>Kịch bản A</td>
+        <td>Mô tả A</td>
+        <td style="display:none;">Nội dung A</td>
+        <td>Nháp</td>
+        <td>2024-11-18</td>
+        <td>2024-11-18</td>
+        <td>
+          <button class="btn" onclick="viewDetails(1)">Xem chi tiết</button>
+        </td>
+      </tr>
+    </tbody>
+    
+    
+  </table>
+</div>
+<div id="viewDetailModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <h2>Chi tiết Kịch bản</h2>
+    <p><strong>Tên kịch bản:</strong> <span id="detailName"></span></p>
+    <p><strong>Mô tả:</strong> <span id="detailDescription"></span></p>
+    <p><strong>Nội dung:</strong></p>
+    <p id="detailContent"></p>
+<p><strong>Trạng thái:</strong> <span id="detailStatus"></span></p>
+    <button class="btn" onclick="closeModal()">Đóng</button>
+  </div>
+</div>
+
+
+<!-- Modal Chỉnh sửa Kịch bản -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <h2>Chỉnh sửa Kịch bản</h2>
+    <form id="editForm">
+      <div class="form-group">
+        <label for="editScriptName">Tên kịch bản:</label>
+        <input type="text" id="editScriptName" required>
+      </div>
+      <div class="form-group">
+        <label for="editDescription">Mô tả:</label>
+        <textarea id="editDescription" rows="3"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="editContent">Nội dung kịch bản:</label>
+        <textarea id="editContent" rows="5"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="editStatus">Trạng thái:</label>
+        <select id="editStatus">
+          <option value="Draft">Nháp</option>
+          <option value="Published">Đã xuất bản</option>
+          <option value="Archived">Đã lưu trữ</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="editCreatedDate">Ngày tạo:</label>
+        <input type="text" id="editCreatedDate" disabled>
+      </div>
+      <div class="form-group">
+        <label for="editLastModifiedDate">Ngày sửa đổi:</label>
+        <input type="text" id="editLastModifiedDate" disabled>
+      </div>
+      <div class="actions">
+        <button type="submit" class="btn">Lưu Thay Đổi</button>
+      </div>
+    </form>
+  </div>
+</div>z
+
+<script>
+  const scripts = [
+    { id: 1, name: "Kịch bản 1", description: "Mô tả cho kịch bản 1", content: "Nội dung chi tiết của kịch bản 1", status: "Draft", createdDate: "2024-10-01", lastModifiedDate: "2024-10-10" },
+    { id: 2, name: "Kịch bản 2", description: "Mô tả cho kịch bản 2", content: "Nội dung chi tiết của kịch bản 2", status: "Published", createdDate: "2024-09-15", lastModifiedDate: "2024-10-05" }
+  ];
+
+  function displayScripts() {
+    const scriptList = document.getElementById('scriptList');
+    scriptList.innerHTML = '';
+    scripts.forEach(script => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${script.id}</td>
+        <td>${script.name}</td>
+        <td>${script.description}</td>
+        <td style="display:none;">${script.content}</td>
+        <td>${script.status}</td>
+        <td>${script.createdDate}</td>
+        <td>${script.lastModifiedDate}</td>
+        <td>
+          <button class="btn" onclick="openEditModal(${script.id})"><i class="fas fa-edit"></i> Chỉnh sửa</button>
+          <button class="btn" onclick="deleteScript(${script.id})" style="background-color:red;"><i class="fas fa-trash-alt"></i> Xóa</button>
+          <button class="btn" onclick="viewDetails(${script.id})"><i class="fas fa-eye"></i> Xem chi tiết</button>
+        </td>
+`;
+
+      scriptList.appendChild(row);
+    });
+  }
+
+  
+function openEditModal(id) {
+  const script = scripts.find(s => s.id === id);
+  if (script) {
+    document.getElementById('editScriptName').value = script.name;
+    document.getElementById('editDescription').value = script.description;
+    document.getElementById('editContent').value = script.content;
+    document.getElementById('editStatus').value = script.status;
+    document.getElementById('editCreatedDate').value = script.createdDate;
+    document.getElementById('editLastModifiedDate').value = script.lastModifiedDate;
+    document.getElementById('editModal').style.display = 'block';
+  }
+}
+
+// Xử lý form chỉnh sửa
+document.getElementById('editForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+  const id = scripts.find(s => s.name === document.getElementById('editScriptName').value).id;
+  const updatedScript = {
+    id: id,
+    name: document.getElementById('editScriptName').value,
+    description: document.getElementById('editDescription').value,
+    content: document.getElementById('editContent').value,
+    status: document.getElementById('editStatus').value,
+    createdDate: document.getElementById('editCreatedDate').value,
+    lastModifiedDate: new Date().toISOString().slice(0, 10) // Update modification date
+  };
+
+  // Cập nhật trong mảng
+  const index = scripts.findIndex(s => s.id === updatedScript.id);
+  if (index > -1) {
+    scripts[index] = updatedScript;
+  }
+
+  displayScripts();
+  closeModal(); // Đóng modal sau khi lưu thay đổi
+});
+
+
+  function closeModal() {
+    // Đóng cả hai modal
+    document.getElementById('viewDetailModal').style.display = 'none';
+    document.getElementById('editModal').style.display = 'none';
+  }
+  function viewDetails(id) {
+    const script = scripts.find(s => s.id === id);
+    if (script) {
+      document.getElementById('detailName').textContent = script.name;
+      document.getElementById('detailDescription').textContent = script.description;
+      document.getElementById('detailContent').textContent = script.content;
+      document.getElementById('detailStatus').textContent = script.status;
+      document.getElementById('viewDetailModal').style.display = 'block';
+    }
+  }
+  
+  
+ 
+  
+
+  function deleteScript(id) {
+    const index = scripts.findIndex(s => s.id === id);
+    if (index > -1) {
+      scripts.splice(index, 1);
+      displayScripts();
+    }
+  }
+
+  document.getElementById('scriptForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const newScript = {
+      id: scripts.length ? scripts[scripts.length - 1].id + 1 : 1,
+      name: document.getElementById('scriptName').value,
+      description: document.getElementById('description').value,
+      content: document.getElementById('content').value,
+      status: document.getElementById('status').value,
+      createdDate: new Date().toISOString().slice(0, 10),
+      lastModifiedDate: new Date().toISOString().slice(0, 10)
+    };
+scripts.push(newScript);
+    displayScripts();
+    document.getElementById('scriptForm').reset();
+  });
+  // Đóng modal khi nhấn ngoài modal
+window.onclick = function (event) {
+  const viewDetailModal = document.getElementById('viewDetailModal');
+  const editModal = document.getElementById('editModal');
+  if (event.target === viewDetailModal) {
+    closeModal();
+  } else if (event.target === editModal) {
+    closeModal();
+  }
+};
+
+  displayScripts();
+</script>
+</body>
+
+</html>

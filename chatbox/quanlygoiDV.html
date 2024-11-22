@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách dịch vụ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        header {
+            background: #4db8ff;
+            padding: 20px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            
+        }
+        
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        .logout-btn {
+            background-color: #d9534f;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #c9302c;
+            transform: translateY(-3px);
+        }
+
+
+
+        #add-btn{
+            padding: 6px 12px;
+            margin-right: 5px;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            background-color: #07ff62;
+        }
+
+        #add-btn:hover {
+            background-color: #cd00e0;
+
+        }
+
+        #export-btn{
+            padding: 6px 12px;
+            margin-right: 5px;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            background-color: #07ff62;
+        }
+
+        #export-btn:hover {
+            background-color: #cd00e0;
+
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .toolbar input[type="text"] {
+            width: 300px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #66ccff;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #e8f5e9;
+        }
+        .status-active {
+            color: #66ccff;
+            font-weight: bold;
+        }
+        .status-inactive {
+            color: #f44336;
+            font-weight: bold;
+        }
+        .action-btn {
+            padding: 6px 12px;
+            margin-right: 5px;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+        }
+        .edit-btn {
+            background-color: #ffc107;
+        }
+        .edit-btn:hover {
+            background-color: #e0a800;
+        }
+        .delete-btn {
+            background-color: #f44336;
+        }
+        .delete-btn:hover {
+            background-color: #d32f2f;
+        }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 400px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .modal-content h2 {
+            margin-top: 0;
+            color: #66ccff;
+        }
+        .modal-content input, .modal-content button {
+            width: 100%;
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .modal-content button {
+            background-color: #66ccff;
+            color: white;
+            border: none;
+            border-radius: 10px;
+        }
+        .modal-content button:hover {
+            background-color: #66ccff;
+        }
+        .close-btn {
+            background-color: #f44336;
+        }
+
+        .menu {
+            display: flex;
+            justify-content: center;
+            background-color: #66ccff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin: 0;
+            padding: 10px 0;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .menu a:hover {
+            background-color: #4db8ff;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Quản lý gói dịch vụ</h1>
+        <div class="toolbar">
+            <input type="text" placeholder="Tìm kiếm..." id="search-input">
+            <button class="logout-btn" id="logout-btn">Đăng xuất</button>
+
+        </div>
+        <button id="export-btn">Xuất file</button>
+        <button id="add-btn">Thêm</button>
+    
+     </header>
+     <nav class="menu">
+        <a href="quanly.html">Trang chủ</a>
+        <a href="quanlytochuc.html">Quản Lý tổ chức</a>
+        <a href="lichsumodel.html">Lịch sử hoạt động</a>
+        <a href="model.html">quản lý model</a>
+        <a href="quanlygoiDV.html">Quản lý gói dịch vụ</a>
+    </nav>
+
+   
+
+    <!-- Table -->
+    <table id="service-table">
+        <thead>
+            <tr>
+                <th>Tên tổ chức</th>
+                <th>Tên dịch vụ</th>
+                <th>Mô tả</th>
+                <th>Giá</th>
+                <th>Thời gian sử dụng</th>
+                <th>Trạng thái</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Công ty A</td>
+                <td>Dịch vụ X</td>
+                <td>Dịch vụ hỗ trợ khách hàng trực tuyến</td>
+                <td>1,000,000 VNĐ</td>
+                <td>30 ngày</td>
+                <td class="status-active">Hoạt động</td>
+                <td>
+                    <button class="action-btn edit-btn" onclick="editService(this)">Sửa</button>
+                    <button class="action-btn delete-btn" onclick="deleteService(this)">Xóa</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <h2 id="modal-title">Thêm/Sửa Dịch Vụ</h2>
+            <label>Tên tổ chức:</label>
+            <input type="text" id="org-name">
+            <label>Tên dịch vụ:</label>
+            <input type="text" id="service-name">
+            <label>Mô tả:</label>
+            <input type="text" id="description">
+            <label>Giá:</label>
+            <input type="text" id="price">
+            <label>Thời gian sử dụng:</label>
+            <select id="time">
+                <option value="month">3 tháng</option>
+                <option value="month">6 tháng</option>
+                <option value="month">12 tháng</option>                
+            </select>
+            <hr>
+            <label>Trạng thái:</label>
+            <select id="status">
+                <option value="Hoạt động">Hoạt động</option>
+                <option value="Không hoạt động">Không hoạt động</option>
+            </select>
+            <button id="save-btn">Lưu</button>
+            <button id="close-btn" class="close-btn">Đóng</button>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('modal');
+        const modalTitle = document.getElementById('modal-title');
+        const closeBtn = document.getElementById('close-btn');
+        const addBtn = document.getElementById('add-btn');
+        const saveBtn = document.getElementById('save-btn');
+        const serviceTable = document.getElementById('service-table').querySelector('tbody');
+        const searchInput = document.getElementById('search-input');
+       
+
+        let editingRow = null; // Biến để lưu dòng đang chỉnh sửa
+
+        searchInput.addEventListener('keyup', function () {
+            const filter = searchInput.value.toLowerCase();
+            const rows = serviceTable.querySelectorAll('tr');
+
+            rows.forEach(row => {
+                const orgName = row.cells[0].textContent.toLowerCase();
+                if (orgName.includes(filter)) {
+                    row.style.display = ""; // Hiển thị dòng
+                } else {
+                    row.style.display = "none"; // Ẩn dòng
+                }
+            });
+        });
+        // Hiển thị modal thêm mới
+        addBtn.addEventListener('click', () => {
+            modalTitle.textContent = "Thêm Dịch Vụ";
+            modal.style.display = 'flex';
+            clearModal();
+            editingRow = null; // Xóa trạng thái chỉnh sửa
+        });
+
+        // Hiển thị modal sửa
+        function editService(button) {
+            modalTitle.textContent = "Sửa Dịch Vụ";
+            modal.style.display = 'flex';
+            const row = button.closest('tr');
+            editingRow = row;
+            document.getElementById('org-name').value = row.cells[0].textContent;
+            document.getElementById('service-name').value = row.cells[1].textContent;
+            document.getElementById('description').value = row.cells[2].textContent;
+            document.getElementById('price').value = row.cells[3].textContent;
+            document.getElementById('time').value = row.cells[4].textContent;
+            document.getElementById('status').value = row.cells[5].textContent;
+        }
+
+        // Lưu dữ liệu
+        saveBtn.addEventListener('click', () => {
+            const orgName = document.getElementById('org-name').value;
+            const serviceName = document.getElementById('service-name').value;
+            const description = document.getElementById('description').value;
+            const price = document.getElementById('price').value;
+            const duration = document.getElementById('time').value;
+            const status = document.getElementById('status').value;
+
+            if (editingRow) {
+                // Cập nhật dòng hiện tại
+                editingRow.cells[0].textContent = orgName;
+                editingRow.cells[1].textContent = serviceName;
+                editingRow.cells[2].textContent = description;
+                editingRow.cells[3].textContent = price;
+                editingRow.cells[4].textContent = duration;
+                editingRow.cells[5].textContent = status;
+            } else {
+                // Thêm dòng mới
+                const newRow = serviceTable.insertRow();
+                newRow.innerHTML = `
+                    <td>${orgName}</td>
+                    <td>${serviceName}</td>
+                    <td>${description}</td>
+                    <td>${price}</td>
+                    <td>${duration}</td>
+                    <td>${status}</td>
+                    <td>
+                        <button class="action-btn edit-btn" onclick="editService(this)">Sửa</button>
+                        <button class="action-btn delete-btn" onclick="deleteService(this)">Xóa</button>
+                    </td>
+                `;
+            }
+            modal.style.display = 'none';
+        });
+
+        // Đóng modal
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        // Xóa dòng
+        function deleteService(button) {
+            const row = button.closest('tr');
+            row.remove();
+        }
+
+        // Xóa dữ liệu trong modal
+        function clearModal() {
+            document.getElementById('org-name').value = '';
+            document.getElementById('service-name').value = '';
+            document.getElementById('description').value = '';
+            document.getElementById('price').value = '';
+            document.getElementById('duration').value = '';
+            document.getElementById('status').value = '';
+        }
+
+        // Hàm xuất danh sách thành file CSV
+function exportToCSV() {
+    const rows = serviceTable.querySelectorAll('tr');
+    const csvContent = [];
+    
+    // Thêm tiêu đề vào CSV
+    const headers = ["Tên tổ chức", "Tên dịch vụ", "Mô tả", "Giá", "Thời gian sử dụng", "Trạng thái"];
+    csvContent.push(headers.join(","));
+    
+    // Thêm dữ liệu các dòng
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        if (cells.length > 0) {
+            const rowData = Array.from(cells).slice(0, 6).map(cell => `"${cell.textContent.trim()}"`);
+            csvContent.push(rowData.join(","));
+        }
+    });
+    
+    // Tạo file CSV
+    const csvBlob = new Blob([csvContent.join("\n")], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(csvBlob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", "DanhSachDichVu.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+    // Gắn sự kiện cho nút Xuất file
+    document.getElementById('export-btn').addEventListener('click', exportToCSV);
+
+      // Lấy tên admin từ SessionStorage
+      const adminName = sessionStorage.getItem('adminName');
+
+// Kiểm tra nếu chưa đăng nhập
+if (!adminName) {
+    alert("Bạn cần đăng nhập trước!");
+    window.location.href = "ADMIN.html"; // Chuyển về trang đăng nhập
+} else {
+    // Hiển thị tên admin
+    document.getElementById('admin-name').textContent = adminName;
+}
+
+// Xử lý nút Đăng xuất
+document.getElementById('logout-btn').addEventListener('click', function() {
+    sessionStorage.clear(); // Xóa thông tin admin khỏi SessionStorage
+    window.location.href = "ADMIN.html"; // Quay lại trang đăng nhập
+});
+
+    </script>
+
+    
+</body>
+</html>

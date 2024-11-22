@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model History</title>
+    <style>
+        /* General styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #bcddf0;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #56ccf2, #2f80ed);
+            color: white;
+            margin: 0;
+            font-size: 2em;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+        .logout-btn {
+            background-color: #d9534f;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #c9302c;
+            transform: translateY(-3px);
+        }
+
+        /* Menu styling */
+        .navbar {
+            display: flex;
+            justify-content: center;
+            background-color: #54cbed;
+            width: 100%;
+            padding: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar a {
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .navbar a:hover {
+            background-color: #4db8ff;
+        }
+
+        /* Table styling */
+        #historyTable {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        #historyTable th, #historyTable td {
+            padding: 14px;
+            text-align: left;
+            border: none;
+        }
+
+        #historyTable th {
+            background-color: #2f80ed;
+            color: white;
+            font-weight: 600;
+        }
+
+        #historyTable tr:nth-child(even) {
+            background-color: #f9fbfc;
+        }
+
+        #historyTable tr:hover {
+            background-color: #e3f2fd;
+        }
+
+        /* Button styling */
+        .button-container {
+            text-align: center;
+            margin: 20px;
+        }
+
+        .button {
+            padding: 10px 20px;
+            background-color: #2f80ed;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 0 10px;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .button:hover {
+            background-color: #1c6dd0;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .button.clear-button {
+            background-color: #f44336;
+        }
+
+        .button.clear-button:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <h1>Model History</h1>
+    <button class="logout-btn" id="logout-btn">Đăng xuất</button>
+
+    <div class="navbar">
+        <a href="quanly.html">Trang chủ</a>
+        <a href="quanlytochuc.html">Quản Lý tổ chức</a>
+        <a href="lichsumodel.html">Lịch sử hoạt động</a>
+        <a href="model.html">quản lý model</a>
+    </div>
+
+    <div class="button-container">
+        <a href="model.html" class="button">Back to Models</a>
+        <button class="button clear-button" onclick="clearHistory()">Clear All History</button>
+    </div>
+
+    <table id="historyTable">
+        <thead>
+            <tr>
+                <th>History ID</th>
+                <th>Model ID</th>
+                <th>Change Date</th>
+                <th>Previous Version</th>
+                <th>Current Version</th>
+                <th>Change Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Dynamic Rows will go here -->
+        </tbody>
+    </table>
+
+    <script>
+        // Retrieve the model history from localStorage
+        const modelHistory = JSON.parse(localStorage.getItem('modelHistory')) || [];
+        const historyTableBody = document.getElementById('historyTable').querySelector('tbody');
+
+        // Function to populate the history table with data
+        function renderHistory() {
+            historyTableBody.innerHTML = ''; // Clear the table body
+            modelHistory.forEach(record => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${record.historyID}</td>
+                    <td>${record.modelID}</td>
+                    <td>${record.changeDate}</td>
+                    <td>${record.previousVersion}</td>
+                    <td>${record.currentVersion}</td>
+                    <td>${record.changeDescription}</td>
+                `;
+                historyTableBody.appendChild(row);
+            });
+        }
+
+        // Clear all history function
+        function clearHistory() {
+            localStorage.removeItem('modelHistory'); // Remove history from localStorage
+            modelHistory.length = 0; // Clear the modelHistory array
+            renderHistory(); // Re-render the empty table
+        }
+
+        // Render the initial history table
+        renderHistory();
+
+        const adminName = sessionStorage.getItem('adminName');
+
+// Kiểm tra nếu chưa đăng nhập
+if (!adminName) {
+    alert("Bạn cần đăng nhập trước!");
+    window.location.href = "ADMIN.html"; // Chuyển về trang đăng nhập
+} else {
+    // Hiển thị tên admin
+    document.getElementById('admin-name').textContent = adminName;
+}
+
+// Xử lý nút Đăng xuất
+document.getElementById('logout-btn').addEventListener('click', function() {
+    sessionStorage.clear(); // Xóa thông tin admin khỏi SessionStorage
+    window.location.href = "ADMIN.html"; // Quay lại trang đăng nhập
+});
+    </script>
+</body>
+</html>

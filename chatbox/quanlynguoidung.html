@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Người Dùng Ứng Dụng Chatbot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #b8daed;
+        }
+
+        header {
+            background-color: #3092f5;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .container h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .add-user {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        .add-user button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .add-user button:hover {
+            background-color: #218838;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #3492f1;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .action-buttons a {
+            text-decoration: none;
+            padding: 8px 12px;
+            color: white;
+            border-radius: 5px;
+            margin-right: 5px;
+            font-size: 14px;
+        }
+
+        .action-buttons .edit {
+            background-color: #ffc107;
+        }
+
+        .action-buttons .delete {
+            background-color: #dc3545;
+        }
+
+        .action-buttons .details {
+            background-color: #17a2b8;
+        }
+
+        .action-buttons a:hover {
+            opacity: 0.8;
+        }
+
+        /* Form section styles */
+        .form-section {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+        }
+
+        .form-section input, .form-section select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-section button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .form-section .save-button {
+            background-color: #28a745;
+        }
+
+        .form-section .cancel-button {
+            background-color: #dc3545;
+        }
+
+        .form-section button:hover {
+            opacity: 0.9;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .modal-header {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .modal-body {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <h1><i class="fas fa-users"></i> Quản Lý Người Dùng Ứng Dụng Chatbot</h1>
+</header>
+
+<div class="container">
+    <h2>Danh Sách Người Dùng</h2>
+
+    <div class="add-user">
+        <button onclick="showAddForm()"><i class="fas fa-user-plus"></i> Thêm Người Dùng</button>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tên Người Dùng</th>
+            <th>Email</th>
+            <th>Ngày Đăng Ký</th>
+            <th>Vai Trò</th>
+            <th>Thao Tác</th>
+        </tr>
+        </thead>
+        <tbody id="userTable">
+            <!-- Mẫu dữ liệu người dùng -->
+        </tbody>
+    </table>
+
+    <!-- Form thêm người dùng -->
+    <div class="form-section" id="addUserForm">
+        <h3>Thêm Người Dùng Mới</h3>
+        <input type="text" id="newUserName" placeholder="Tên Người Dùng">
+        <input type="email" id="newUserEmail" placeholder="Email">
+        <select id="newUserRole">
+            <option value="Người Dùng">Người Dùng</option>
+            <option value="Quản Trị Viên">Quản Trị Viên</option>
+        </select>
+        <button class="save-button" onclick="addUser()">Lưu</button>
+        <button class="cancel-button" onclick="hideForm('addUserForm')">Hủy</button>
+    </div>
+
+    <!-- Form sửa người dùng -->
+    <div class="form-section" id="editUserForm">
+        <h3>Sửa Thông Tin Người Dùng</h3>
+        <input type="hidden" id="editUserId">
+        <input type="text" id="editUserName" placeholder="Tên Người Dùng">
+        <input type="email" id="editUserEmail" placeholder="Email">
+        <select id="editUserRole">
+            <option value="Người Dùng">Người Dùng</option>
+            <option value="Quản Trị Viên">Quản Trị Viên</option>
+        </select>
+        <button class="save-button" onclick="saveUser()">Lưu</button>
+        <button class="cancel-button" onclick="hideForm('editUserForm')">Hủy</button>
+    </div>
+
+    <!-- Modal chi tiết người dùng -->
+    <div id="userDetailsModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div class="modal-header">Chi Tiết Người Dùng</div>
+            <div class="modal-body" id="userDetailsContent"></div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Function để hiển thị chi tiết người dùng
+    function viewDetails(id, name, email, registrationDate, role) {
+        var detailsContent = `
+            <p><strong>ID:</strong> ${id}</p>
+            <p><strong>Tên Người Dùng:</strong> ${name}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Ngày Đăng Ký:</strong> ${registrationDate}</p>
+            <p><strong>Vai Trò:</strong> ${role}</p>
+        `;
+        document.getElementById("userDetailsContent").innerHTML = detailsContent;
+        document.getElementById("userDetailsModal").style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById("userDetailsModal").style.display = "none";
+    }
+
+    // Hiển thị form thêm người dùng
+    function showAddForm() {
+        document.getElementById("addUserForm").style.display = "block";
+    }
+
+    function hideForm(formId) {
+        document.getElementById(formId).style.display = "none";
+    }
+    let userIdCounter = 1;
+    // Function để thêm người dùng mới
+    function addUser() {
+    // Lấy giá trị từ form
+    var name = document.getElementById("newUserName").value;
+    var email = document.getElementById("newUserEmail").value;
+    var role = document.getElementById("newUserRole").value;
+
+    // Tạo ID cho người dùng mới
+    var userId = userIdCounter;
+
+    // Tăng ID cho người dùng tiếp theo
+    userIdCounter++;
+
+    // Thêm người dùng vào bảng (logic xử lý thực tế sẽ thêm vào backend)
+    var newRow = `<tr>
+        <td>${userId}</td>
+        <td>${name}</td>
+        <td>${email}</td>
+        <td>${new Date().toLocaleDateString()}</td>
+        <td>${role}</td>
+        <td class="action-buttons">
+            <a href="#" class="details" onclick="viewDetails(${userId}, '${name}', '${email}', '${new Date().toLocaleDateString()}', '${role}')">Xem Chi Tiết</a>
+            <a href="#" class="edit" onclick="showEditForm(${userId}, '${name}', '${email}', '${role}')">Sửa</a>
+            <a href="#" class="delete" onclick="deleteUser(${userId})">Xóa</a>
+        </td>
+    </tr>`;
+    document.getElementById("userTable").insertAdjacentHTML("beforeend", newRow);
+
+    hideForm('addUserForm');
+    }
+
+    // Hiển thị form sửa người dùng
+    function showEditForm(id, name, email, role) {
+        document.getElementById("editUserId").value = id;
+        document.getElementById("editUserName").value = name;
+        document.getElementById("editUserEmail").value = email;
+        document.getElementById("editUserRole").value = role;
+        document.getElementById("editUserForm").style.display = "block";
+    }
+
+    // Lưu người dùng đã chỉnh sửa
+    function saveUser() {
+        // Lưu logic tại đây (ví dụ: gọi API để cập nhật thông tin người dùng)
+        hideForm('editUserForm');
+    }
+
+    // Xóa người dùng
+    function deleteUser(id) {
+        // Logic để xóa người dùng
+        alert("Đã xóa người dùng có ID: " + id);
+    }
+
+    // Đóng modal khi click ra ngoài
+    window.onclick = function(event) {
+        var modal = document.getElementById("userDetailsModal");
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
+</body>
+</html>

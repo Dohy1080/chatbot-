@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng ký dịch vụ</title>
+  <style>
+    /* Reset và định dạng mặc định */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #b8daed;
+      color: #333;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      background: linear-gradient(135deg, #73d2f2, #4995f8);
+      color: rgb(255, 255, 255);
+      padding: 20px 0;
+      text-align: center;
+      width: 100%;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    header h1 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #3bdc35;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 16px;
+      transition: background-color 0.3s, transform 0.1s;
+      margin-top: 10px;
+    }
+
+    .back-btn:hover {
+      background-color: #28a745;
+      transform: scale(1.05);
+    }
+
+    main {
+      padding: 30px 20px;
+      max-width: 700px;
+      margin: 20px auto;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      color: #2f80ed;
+      font-size: 22px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+
+    th, td {
+      padding: 14px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #f1f8ff;
+      color: #333;
+      font-weight: bold;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9fbfc;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #2f80ed;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 14px;
+      display: block;
+      margin: 0 auto;
+      transition: background-color 0.3s;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    button:hover {
+      background-color: #1c6dd0;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px 0;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Đăng ký Dịch vụ</h1>
+    <a href="trangchinh.html" class="back-btn">Quay lại</a>
+  </header>
+
+  <main>
+    <!-- Quản lý gói dịch vụ -->
+    <form id="service-form">
+      <table>
+        <tr>
+          <th>Tên gói</th>
+          <th>Giá</th>
+          <th>Chọn</th>
+        </tr>
+        <tr>
+          <td>Gói Cơ bản</td>
+          <td>100,000 VNĐ/tháng</td>
+          <td><input type="radio" name="service" value="Cơ bản" required></td>
+        </tr>
+        <tr>
+          <td>Gói Tiêu chuẩn</td>
+          <td>200,000 VNĐ/tháng</td>
+          <td><input type="radio" name="service" value="Tiêu chuẩn" required></td>
+        </tr>
+        <tr>
+          <td>Gói Cao cấp</td>
+          <td>300,000 VNĐ/tháng</td>
+          <td><input type="radio" name="service" value="Cao cấp" required></td>
+        </tr>
+      </table>
+      <button type="submit">THANH TOÁN</button> 
+    </form>
+  </main>
+
+  <footer>
+    <p>&copy; 2024 Đăng ký dịch vụ</p>
+  </footer>
+
+  <script>
+    const form = document.getElementById('service-form');
+    form.addEventListener('submit', (event) => {
+      event.preventDefault(); // Ngăn trang reload
+      const selectedService = document.querySelector('input[name="service"]:checked').value;
+      // Chuyển hướng sang trang thanh toán với thông tin gói dịch vụ trong URL
+      window.location.href = `thanhtoan.html?service=${encodeURIComponent(selectedService)}`;
+    });
+  </script>
+</body>
+</html>

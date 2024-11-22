@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang quản trị</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: #4db8ff;
+            padding: 20px;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-info {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            background-color: #d9534f;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #c9302c;
+            transform: translateY(-3px);
+        }
+
+        .menu {
+            display: flex;
+            justify-content: center;
+            background-color: #66ccff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin: 0;
+            padding: 10px 0;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .menu a:hover {
+            background-color: #4db8ff;
+            border-radius: 5px;
+        }
+
+        .content {
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        
+        <div class="admin-info">Xin chào, <span id="admin-name"></span></div>
+        <button class="logout-btn" id="logout-btn">Đăng xuất</button>
+    </header>
+    
+    <nav class="menu">
+        <a href="quanly.html">Trang chủ</a>
+        <a href="quanlytochuc.html">Quản Lý tổ chức</a>
+        <a href="lichsumodel.html">Lịch sử hoạt động</a>
+        <a href="model.html">quản lý model</a>
+        <a href="quanlygoiDV.html">Quản lý gói dịch vụ</a>
+    </nav>
+    
+    <div class="content">
+        <h1>Chào mừng đến với trang quản trị</h1>
+    </div>
+
+    <script>
+        // Lấy tên admin từ SessionStorage
+        const adminName = sessionStorage.getItem('adminName');
+
+        // Kiểm tra nếu chưa đăng nhập
+        if (!adminName) {
+            alert("Bạn cần đăng nhập trước!");
+            window.location.href = "ADMIN.html"; // Chuyển về trang đăng nhập
+        } else {
+            // Hiển thị tên admin
+            document.getElementById('admin-name').textContent = adminName;
+        }
+
+        // Xử lý nút Đăng xuất
+        document.getElementById('logout-btn').addEventListener('click', function() {
+            sessionStorage.clear(); // Xóa thông tin admin khỏi SessionStorage
+            window.location.href = "ADMIN.html"; // Quay lại trang đăng nhập
+        });
+    </script>
+</body>
+</html>
